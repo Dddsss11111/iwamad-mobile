@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Link } from 'expo-router';
 
-export default function App() {
+export default function HomeScreen() {
   const [likes, setLikes] = useState(0);
 
   return (
@@ -13,6 +14,13 @@ export default function App() {
       <Pressable onPress={() => setLikes(likes + 1)} style={styles.button}>
         <Text style={styles.buttonText}>Like</Text>
       </Pressable>
+
+      <Link href="/events" asChild>
+        <Pressable style={styles.eventsButton}>
+          <Text style={styles.buttonText}>Events</Text>
+        </Pressable>
+      </Link>
+
       <StatusBar style="auto" />
     </View>
   );
@@ -47,6 +55,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  eventsButton: {
+    minHeight: 44,
+    paddingHorizontal: 24,
+    paddingVertical: 10,
+    backgroundColor: '#34C759',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 12,
   },
   buttonText: {
     color: '#fff',
