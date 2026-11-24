@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "title": "KBTU Game Dev Jam",
+    "date": "2026-11-10",
+    "place": "Independence Hall",
+    "seats": 60
+  },
+  {
+    "id": 2,
+    "title": "Mobile Dev Workshop",
+    "date": "2026-11-14",
+    "place": "Room 412",
+    "seats": 35
+  },
+  {
+    "id": 3,
+    "title": "Almaty Startup Meetup",
+    "date": "2026-11-19",
+    "place": "Smart Point",
+    "seats": 80
+  },
+  {
+    "id": 4,
+    "title": "UI/UX Design Sprint",
+    "date": "2026-11-23",
+    "place": "Coworking Zone",
+    "seats": 25
+  },
+  {
+    "id": 5,
+    "title": "Cloud & DevOps Talk",
+    "date": "2026-11-27",
+    "place": "Red Hall",
+    "seats": 50
+  }
+]
