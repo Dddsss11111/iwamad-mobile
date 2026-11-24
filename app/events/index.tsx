@@ -1,14 +1,44 @@
 import { useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { router } from 'expo-router';
-import { EVENTS } from '../../src/data/events';
+import { useEvents } from '../../src/hooks/useEvents';
 import { EventRow } from '../../src/components/EventRow';
 
 export default function EventsScreen() {
+  const { data, isPending, isError, error, refetch, isRefetching } = useEvents();
   const [savedIds, setSavedIds] = useState<number[]>([]);
   const [search, setSearch] = useState('');
 
-  const filteredEvents = EVENTS.filter((event) =>
+  if (isPending) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color="#007AFF" />
+        <Text style={styles.statusText}>Loading events</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.errorText}>Could not load events</Text>
+        <Text style={styles.errorDetail}>{error.message}</Text>
+        <Pressable onPress={() => refetch()} style={styles.retryButton}>
+          <Text style={styles.retryText}>Try again</Text>
+        </Pressable>
+      </View>
+    );
+  }
+
+  const filteredEvents = data.filter((event) =>
     event.title.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -32,6 +62,8 @@ export default function EventsScreen() {
       <FlatList
         data={filteredEvents}
         keyExtractor={(e) => String(e.id)}
+        refreshing={isRefetching}
+        onRefresh={() => refetch()}
         renderItem={({ item }) => (
           <EventRow
             event={item}
@@ -51,6 +83,43 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 16,
+  },
+  center: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  statusText: {
+    fontSize: 16,
+    color: '#555',
+    marginTop: 12,
+  },
+  errorText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#d32f2f',
+    marginBottom: 6,
+  },
+  errorDetail: {
+    fontSize: 15,
+    color: '#666',
+    marginBottom: 14,
+  },
+  retryButton: {
+    minHeight: 44,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#007AFF',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  retryText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   searchInput: {
     minHeight: 44,
