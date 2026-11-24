@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useEvents } from '../../src/hooks/useEvents';
+import { HolidayNote } from '../../src/components/HolidayNote';
 
 export default function EventDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -52,6 +53,7 @@ export default function EventDetailScreen() {
       <Stack.Screen options={{ title: event.title }} />
       <Text style={styles.title}>{event.title}</Text>
       <Text style={styles.detail}>Date: {event.date}</Text>
+      <HolidayNote date={event.date} />
       <Text style={styles.detail}>Place: {event.place}</Text>
       <Text style={styles.detail}>Seats: {event.seats}</Text>
     </View>
