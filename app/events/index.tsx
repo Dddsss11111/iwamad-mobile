@@ -10,11 +10,12 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import { useEvents } from '../../src/hooks/useEvents';
+import { useSavedIds } from '../../src/hooks/useSavedIds';
 import { EventRow } from '../../src/components/EventRow';
 
 export default function EventsScreen() {
   const { data, isPending, isError, error, refetch, isRefetching } = useEvents();
-  const [savedIds, setSavedIds] = useState<number[]>([]);
+  const { savedIds, toggleSaved } = useSavedIds();
   const [search, setSearch] = useState('');
 
   if (isPending) {
@@ -42,12 +43,6 @@ export default function EventsScreen() {
     event.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  const toggleSave = (id: number) => {
-    setSavedIds((ids) =>
-      ids.includes(id) ? ids.filter((item) => item !== id) : [...ids, id]
-    );
-  };
-
   return (
     <View style={styles.container}>
       <TextInput
@@ -57,7 +52,7 @@ export default function EventsScreen() {
         style={styles.searchInput}
       />
       <Text style={styles.hint}>
-        Long-press an event to save it. Saved: {savedIds.length}
+        Swipe or long-press an event to save it. Saved: {savedIds.length}
       </Text>
       <FlatList
         data={filteredEvents}
@@ -69,7 +64,7 @@ export default function EventsScreen() {
             event={item}
             saved={savedIds.includes(item.id)}
             onPress={() => router.push(`/events/${item.id}`)}
-            onLongPress={() => toggleSave(item.id)}
+            onToggleSaved={() => toggleSaved(item.id)}
           />
         )}
         ListEmptyComponent={<Text style={styles.empty}>No events match.</Text>}
